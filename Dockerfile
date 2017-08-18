@@ -1,6 +1,6 @@
 FROM mageia:6
 MAINTAINER JMiahMan <JMiahMan@Unity-Linux.org>
-RUN dnf -y install 'dnf-command(copr)'
+RUN dnf -y install --setopt=install_weak_deps=False 'dnf-command(copr)'
 RUN dnf copr enable jmiahman/Unity-Linux -y
 RUN dnf -y install --setopt=install_weak_deps=False kernel-unity-desktop-latest kernel-unity-desktop-devel-latest
 RUN rpm -e --nodeps systemd; dnf clean all 
