@@ -15,3 +15,4 @@ RUN echo "root:Unity!" | chpasswd
 RUN passwd -d root
 VOLUME [ "/rpmbuild" ]
 VOLUME [ "/sys/fs/cgroup" ]
+CMD ["/bin/bash"]
