@@ -24,7 +24,7 @@ script:
   - docker export cloud | sudo tar x -C ./mnt
   - sudo umount ./mnt
   - IMG=$(find ~/ -name *.img)
-  - qemu-img convert -f raw -O qcow2 $IMG ./unity-cloud_qcow2.qcow2
+  - qemu-img convert -c -f raw -O qcow2 $IMG ./unity-cloud_qcow2.qcow2
   - xz -9 $IMG
   - IMGXZ=$(find ~/ -name *.img.xz)
   - IMGQCOW=$(find ~/ -name *.qcow2)
