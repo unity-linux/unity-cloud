@@ -23,8 +23,10 @@ script:
   - docker export cloud | sudo tar x -C ./mnt
   - sudo umount ./mnt
   - IMG=$(find ~/ -name *.img)
+  - xz -9 $IMG
+  - IMGXZ=$(find ~/ -name *.img.xz)
   - mkdir ./build_cloud
-  - mv $IMG ./build_cloud/
+  - mv $IMGXZ ./build_cloud/
 
 after_success:
   - rsync -arz --progress --delete --rsh=ssh -e "ssh -o StrictHostKeyChecking=no" ./build_cloud foobar2:public_html/pub/isos/ &
