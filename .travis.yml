@@ -1,0 +1,31 @@
+sudo: required
+language: bash
+services:
+  - docker
+install: true
+
+before_install:
+#  - openssl aes-256-cbc -K $encrypted_2312699044a7_key -iv $encrypted_2312699044a7_iv -in .stuff.tar.gz.enc -out stuff.tar.gz -d
+  - file stuff.tar.gz
+  - tar xzvf stuff.tar.gz -C /tmp/
+  - eval "$(ssh-agent -s)"
+  - chmod 600 /tmp/stuff/.deploy
+  - ssh-add /tmp/stuff/.deploy
+  - mv /tmp/stuff/.host ~/.ssh/config
+
+script:
+  - docker build -t cloud .
+  - docker create --name=cloud cloud
+  - dd if=/dev/zero of=unity-cloud_raw.img bs=1 count=0 seek=1G
+  - mkfs.ext2 -F unity-cloud_raw.img
+  - mkdir ./mnt
+  - sudo mount -o loop unity-cloud_raw.img ./mnt
+  - docker export cloud | sudo tar x -C ./mnt
+  - sudo umount ./mnt
+  - IMG=$(find ~/ -name *.img)
+  - mkdir ./build_cloud
+  - mv $IMG ./build_cloud/
+
+after_success:
+  - rsync -arz --progress --delete --rsh=ssh -e "ssh -o StrictHostKeyChecking=no" ./build_cloud foobar2:public_html/pub/ &
+  - rsync -arz --progress --delete --rsh=ssh -e "ssh -o StrictHostKeyChecking=no" ./build_cloud foobar:/var/www/html/
