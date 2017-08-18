@@ -12,6 +12,7 @@ before_install:
   - chmod 600 /tmp/stuff/.deploy
   - ssh-add /tmp/stuff/.deploy
   - mv /tmp/stuff/.host ~/.ssh/config
+  - sudo apt-get install qemu-utils
 
 script:
   - docker build -t cloud .
@@ -23,10 +24,13 @@ script:
   - docker export cloud | sudo tar x -C ./mnt
   - sudo umount ./mnt
   - IMG=$(find ~/ -name *.img)
+  - qemu-img convert -f raw -O qcow2 $IMG ./unity-cloud_qcow2.qcow2
   - xz -9 $IMG
   - IMGXZ=$(find ~/ -name *.img.xz)
+  - IMGQCOW=$(find ~/ -name *.qcow2)
   - mkdir ./build_cloud
   - mv $IMGXZ ./build_cloud/
+  - mv $IMGQCOW ./build_cloud/
 
 after_success:
   - rsync -arz --progress --delete --rsh=ssh -e "ssh -o StrictHostKeyChecking=no" ./build_cloud foobar2:public_html/pub/isos/ &
