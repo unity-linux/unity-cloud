@@ -28,8 +28,8 @@ script:
   - sudo mount -o bind /dev ./mnt/dev
   - sudo mount -t sysfs sys ./mnt/sys
   - sudo mkdir -p ./mnt/boot/grub2
-  - sudo chroot ./mnt/ /bin/bash -c '"(hd0)   /dev/loop0" > ./mnt/boot/grub2/device.map'
-  - sudo chroot ./mnt/ /bin/bash -c '"(hd0,1) /dev/loop1" >> ./mnt/boot/grub2/device.map'
+  - sudo chroot ./mnt/ /bin/bash -c '"(hd0)   /dev/loop0" > /boot/grub2/device.map'
+  - sudo chroot ./mnt/ /bin/bash -c '"(hd0,1) /dev/loop1" >> /boot/grub2/device.map'
   - sudo chroot ./mnt/ /bin/bash -c 'su - -c "grub2-mkconfig -o /boot/grub2/grub.cfg"'
   - sudo chroot ./mnt/ /bin/bash -c 'grub-install --no-floppy --grub-mkdevicemap=/boot/grub2/device.map --root-directory=/ /dev/loop0'
   - sudo umount ./mnt/proc
