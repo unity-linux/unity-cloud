@@ -19,13 +19,13 @@ script:
   - docker create --name=cloud cloud
   - dd if=/dev/zero of=unity-cloud_raw.img bs=1 count=0 seek=3G
   - printf 'o\nn\np\n1\n\n\nw\n' | fdisk unity-cloud_raw.img
-  - kpartx -av unity-cloud_raw.img
+  - sudo kpartx -av unity-cloud_raw.img
   - mke2fs -t ext4 /dev/mapper/loop0p1
   - mkdir ./mnt
   - sudo mount -o loop /dev/mapper/loop0p1 ./mnt
   - docker export cloud | sudo tar x -C ./mnt
   - sudo mount ./mnt
-  - kpartx -dv unity-cloud_raw.img
+  - sudo kpartx -dv unity-cloud_raw.img
   - IMG=$(find ~/ -name *.img)
   - qemu-img convert -c -f raw -O qcow2 $IMG ./unity-cloud_qcow2.qcow2
   - xz -9 $IMG
