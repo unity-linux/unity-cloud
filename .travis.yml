@@ -12,17 +12,20 @@ before_install:
   - chmod 600 /tmp/stuff/.deploy
   - ssh-add /tmp/stuff/.deploy
   - mv /tmp/stuff/.host ~/.ssh/config
-  - sudo apt-get install qemu-utils
+  - apt-get install qemu-utils kpartx fdisk
 
 script:
   - docker build -t cloud .
   - docker create --name=cloud cloud
   - dd if=/dev/zero of=unity-cloud_raw.img bs=1 count=0 seek=3G
-  - mkfs.ext2 -F unity-cloud_raw.img
+  - printf 'o\nn\np\n1\n\n\nw\n' | fdisk unity-cloud_raw.img
+  - kpartx -av unity-cloud_raw.img
+  - mke2fs -t ext4 /dev/mapper/loop0p1
   - mkdir ./mnt
-  - sudo mount -o loop unity-cloud_raw.img ./mnt
+  - mount -o loop /dev/mapper/loop0p1 ./mnt
   - docker export cloud | sudo tar x -C ./mnt
-  - sudo umount ./mnt
+  - mount ./mnt
+  - kpartx -dv unity-cloud_raw.img
   - IMG=$(find ~/ -name *.img)
   - qemu-img convert -c -f raw -O qcow2 $IMG ./unity-cloud_qcow2.qcow2
   - xz -9 $IMG
