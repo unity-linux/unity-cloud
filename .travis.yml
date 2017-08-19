@@ -24,6 +24,7 @@ script:
   - mkdir ./mnt
   - sudo mount -o loop /dev/mapper/loop0p1 ./mnt
   - docker export cloud | sudo tar x -C ./mnt
+  - sudo grub-install --boot-directory=./mnt unity-cloud_raw.img
   - sudo umount ./mnt
   - sudo kpartx -dv unity-cloud_raw.img
   - IMG=$(find ~/ -name *.img)
