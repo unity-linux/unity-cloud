@@ -12,7 +12,7 @@ before_install:
   - chmod 600 /tmp/stuff/.deploy
   - ssh-add /tmp/stuff/.deploy
   - mv /tmp/stuff/.host ~/.ssh/config
-  - sudo apt-get install qemu-utils kpartx fdisk
+  - sudo apt-get install qemu-utils kpartx util-linux
 
 script:
   - docker build -t cloud .
