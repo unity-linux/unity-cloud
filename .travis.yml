@@ -25,6 +25,13 @@ script:
   - sudo mount -o loop /dev/mapper/loop0p1 ./mnt
   - docker export cloud | sudo tar x -C ./mnt
   - sudo grub-install --boot-directory=./mnt/boot unity-cloud_raw.img
+  - mount -t proc none ./mnt/proc
+  - mount -o bind /dev ./mnt/dev
+  - mount -t sysfs sys ./mnt/sys
+  - chroot ./mnt/ /bin/bash -c "su - -c grub2-mkconfig -o /boot/grub2/grub.cfg"
+  - sudo umount ./mnt/proc
+  - sudo umount ./mnt/dev
+  - sudo umount ./mnt/proc
   - sudo umount ./mnt
   - sudo kpartx -dv unity-cloud_raw.img
   - IMG=$(find ~/ -name *.img)
