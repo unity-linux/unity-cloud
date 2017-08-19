@@ -28,7 +28,7 @@ script:
   - mount -t proc none ./mnt/proc
   - mount -o bind /dev ./mnt/dev
   - mount -t sysfs sys ./mnt/sys
-  - chroot ./mnt/ /bin/bash -c "su - -c grub2-mkconfig -o /boot/grub2/grub.cfg"
+  - chroot ./mnt/ /bin/bash -c 'su - -c "grub2-mkconfig -o /boot/grub2/grub.cfg"'
   - sudo umount ./mnt/proc
   - sudo umount ./mnt/dev
   - sudo umount ./mnt/proc
