@@ -17,7 +17,7 @@ before_install:
 script:
   - docker build -t cloud .
   - docker create --name=cloud cloud
-  - dd if=/dev/zero of=unity-cloud_raw.img bs=1 count=0 seek=1G
+  - dd if=/dev/zero of=unity-cloud_raw.img bs=1 count=0 seek=3G
   - mkfs.ext2 -F unity-cloud_raw.img
   - mkdir ./mnt
   - sudo mount -o loop unity-cloud_raw.img ./mnt
