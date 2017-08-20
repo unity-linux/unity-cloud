@@ -35,7 +35,7 @@ script:
   - sudo chroot ./mnt/ /bin/bash -c 'echo "(hd0) /dev/loop0" > /boot/grub2/device.map'
   - sudo chroot ./mnt/ /bin/bash -c 'grub2-install --no-floppy --grub-mkdevicemap=/boot/grub2/device.map --root-directory=/ /dev/loop0'
   - sudo chroot ./mnt/ /bin/bash -c 'su - -c "grub2-mkconfig -o /boot/grub2/grub.cfg"'
-  - sudo chroot ./mnt/ /bin/bash -c 'sed -i "s%/dev/mapper/loop0p1 ro%/dev/sda1 rw audit=0%g" /boot/grub2/grub.cfg'
+  - sudo chroot ./mnt/ /bin/bash -c 'sed -i "s%/dev/mapper/loop0p1 ro%/dev/sda1 ro console=tty1 console=ttyS0,115200n8%g" /boot/grub2/grub.cfg'
   - sudo umount ./mnt/proc
   - sudo umount ./mnt/dev
   - sudo umount ./mnt/sys
