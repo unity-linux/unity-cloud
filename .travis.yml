@@ -12,14 +12,15 @@ before_install:
   - chmod 600 /tmp/stuff/.deploy
   - ssh-add /tmp/stuff/.deploy
   - mv /tmp/stuff/.host ~/.ssh/config
-  - sudo apt-get install qemu-utils kpartx util-linux
+  - sudo apt-get install qemu-utils kpartx parted
 
 script:
   - docker build -t cloud .
   - docker create --name=cloud cloud
   - dd if=/dev/zero of=unity-cloud_raw.img bs=1 count=0 seek=3G
-  - printf 'o\nn\np\n1\n\n\nw\n' | fdisk unity-cloud_raw.img
+  - sudo parted --script unity-cloud_raw.img mklabel msdos mkpart p ext2 1 20 set 1 boot on
   - sudo kpartx -av unity-cloud_raw.img
+  - sleep 5
   - sudo mke2fs -t ext4 /dev/mapper/loop0p1
   - mkdir ./mnt
   - sudo mount -o loop /dev/mapper/loop0p1 ./mnt
@@ -29,8 +30,8 @@ script:
   - sudo mount -t sysfs sys ./mnt/sys
   - sudo mkdir -p ./mnt/boot/grub2
   - sudo chroot ./mnt/ /bin/bash -c 'echo "(hd0) /dev/loop0" > /boot/grub2/device.map'
-  - sudo chroot ./mnt/ /bin/bash -c 'su - -c "grub2-mkconfig -o /boot/grub2/grub.cfg"'
   - sudo chroot ./mnt/ /bin/bash -c 'grub2-install --no-floppy --grub-mkdevicemap=/boot/grub2/device.map --root-directory=/ /dev/loop0'
+  - sudo chroot ./mnt/ /bin/bash -c 'su - -c "grub2-mkconfig -o /boot/grub2/grub.cfg"'
   - sudo umount ./mnt/proc
   - sudo umount ./mnt/dev
   - sudo umount ./mnt/sys
