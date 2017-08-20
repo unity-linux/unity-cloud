@@ -24,8 +24,11 @@ script:
   - sudo kpartx -av unity-cloud_raw.img
   - sleep 5
   - sudo mke2fs -t ext2 /dev/mapper/loop0p1
-  - UUID=$(sudo blkid /dev/mapper/loop0p1 | awk '{print $3}')
+  - UUID=$(uuidgen)
+  - sudo tune2fs /dev/mapper/loop0p1 -U ${UUID}
+  - UUID_PART=$(sudo blkid /dev/mapper/loop0p1 | awk '{print $3}')
   - echo ${UUID}
+  - echo ${UUID_PART}
   - mkdir ./mnt
   - sudo mount /dev/mapper/loop0p1 ./mnt
   - df -h
