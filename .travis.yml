@@ -17,6 +17,7 @@ before_install:
 script:
   - docker build -t cloud .
   - docker create --name=cloud cloud
+  - echo $(docker images | awk '{print $7}' | grep -m1 [0-9])
   - sudo fallocate -l 2G unity-cloud_raw.img
   - sudo parted --script unity-cloud_raw.img mklabel msdos mkpart p ext2 1 20 set 1 boot on
   - sudo kpartx -av unity-cloud_raw.img
