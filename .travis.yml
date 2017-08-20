@@ -20,7 +20,7 @@ script:
   - echo $(docker images | awk '{print $7}' | grep -m1 [0-9])
   - sudo fallocate -l 1G unity-cloud_raw.img
   - ls -lha unity-cloud_raw.img
-  - sudo parted --script unity-cloud_raw.img mklabel msdos mkpart p ext2 1 -1 set 1 boot on
+  - sudo parted --script unity-cloud_raw.img mklabel msdos mkpart p ext2 1 100% set 1 boot on
   - sudo kpartx -av unity-cloud_raw.img
   - sleep 5
   - sudo mke2fs -t ext2 /dev/mapper/loop0p1
