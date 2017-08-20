@@ -17,13 +17,14 @@ before_install:
 script:
   - docker build -t cloud .
   - docker create --name=cloud cloud
-  - sudo fallocate -l 3G unity-cloud_raw.img
+  - sudo fallocate -l 5G unity-cloud_raw.img
   - sudo parted --script unity-cloud_raw.img mklabel msdos mkpart p ext2 1 20 set 1 boot on
   - sudo kpartx -av unity-cloud_raw.img
   - sleep 5
-  - sudo mke2fs -t ext4 /dev/mapper/loop0p1
+  - sudo mke2fs -t ext2 /dev/mapper/loop0p1
   - mkdir ./mnt
   - sudo mount -o loop /dev/mapper/loop0p1 ./mnt
+  - df -h /dev/mapper/loop0p1
   - sudo docker export cloud | sudo tar x -C ./mnt
   - sudo mount -t proc none ./mnt/proc
   - sudo mount -o bind /dev ./mnt/dev
