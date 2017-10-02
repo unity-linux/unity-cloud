@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/unity-linux/unity-cloud.svg?branch=master)](https://travis-ci.org/unity-linux/unity-cloud)
+
 This is just a quick and dirty way to generate a raw (for now) cloud image for Unity Linux via docker. This cloud image can be used to build packages and test on headless installs that can be ran in qemu based environments (in my case openstack). 
 
 
