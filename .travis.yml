@@ -58,4 +58,5 @@ script:
 
 after_success:
   - rsync -arz --progress --delete --rsh=ssh -e "ssh -o StrictHostKeyChecking=no" ./build_cloud foobar2:public_html/pub/isos/ &
-  - rsync -arz --progress --delete --rsh=ssh -e "ssh -o StrictHostKeyChecking=no" ./build_cloud foobar:/var/www/html/isos/
+  - rsync -arz --progress --delete --rsh=ssh -e "ssh -o StrictHostKeyChecking=no" ./build_cloud foobar:/var/www/html/isos/ &
+  - wait %1 %2
