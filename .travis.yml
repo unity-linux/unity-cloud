@@ -48,7 +48,7 @@ script:
   - sudo kpartx -dv unity-cloud_raw.img
   - IMG=$(find ~/ -name *.img)
   - qemu-img convert -c -f raw -O qcow2 $IMG ./unity-cloud_qcow2.qcow2
-  - xz -9 $IMG &
+  - sudo xz -9 $IMG &
   - while ps ax | grep xz | grep -v grep > /dev/null ; do sleep 60 ; export x="$(($x+1))" ; echo "--==|Compression has been running for $x minute(s)|==--" ; done
   - IMGXZ=$(find ~/ -name *.img.xz)
   - IMGQCOW=$(find ~/ -name *.qcow2)
