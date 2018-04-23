@@ -15,7 +15,7 @@ before_install:
   - sudo apt-get install qemu-utils kpartx parted
 
 script:
-  - docker build -t cloud .
+  - docker build -t cloud -f Dockerfile-x86_64 .
   - docker create --name=cloud cloud
   - echo $(docker images | awk '{print $7}' | grep -m1 [0-9])
   - sudo fallocate -l 2G unity-cloud_raw.img
