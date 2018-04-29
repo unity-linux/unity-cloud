@@ -8,7 +8,6 @@ RUN mkdir -p /etc/yum.repos.d/
 ADD https://raw.githubusercontent.com/unity-linux/unity-repos/master/Unity-Linux-mageia.repo /etc/yum.repos.d/Unity-Linux-mageia.repo
 ADD https://raw.githubusercontent.com/unity-linux/unity-repos/master/RPM-GPG-KEY-Unity /etc/pki/rpm-gpg/RPM-GPG-KEY-Unity
 RUN rpm --import /etc/pki/rpm-gpg/RPM-GPG-KEY-Unity
-RUN dnf -y reinstall --setopt=install_weak_deps=False systemd
 RUN dnf -y install --setopt=install_weak_deps=False systemd grub2 wget curl openssh-clients openssh-server dhcp-client cloud-init cloud-utils*
 RUN dnf -y install --setopt=install_weak_deps=False dnf-plugins-core mock mgarepo rpmdevtools rpm-sign cracklib-dicts rpmlint intltool
 RUN dnf update -y
